@@ -4,10 +4,15 @@ from matplotlib import pyplot as plt
 
 
 def policy_iteration(mdp):
+    """
+    Run policy iteration algorithm to solve the given MDP
+    model.
+    """
+
     # ::::: Initialization :::::
     v = mdp.initialize_v(mdp.states)
     pi = mdp.initialize_pi(mdp.states, mdp.s_to_a)
-    tolerance = 1e-3
+    tolerance = 1e-2
 
     v_list = [v.copy()]
     pi_list = [pi.copy()]
@@ -64,16 +69,16 @@ def policy_iteration(mdp):
         print(f'Number of state actions changed: {num_a_changed}')
         print('\n')
         pi_list.append(pi.copy())
-        visualize_policy(pi)
+        visualize_policy_cli(pi)
         policy_its += 1
 
-    with open('policy_iteration_results_4.7.pkl', 'wb') as f:
+    with open(f'policy_iteration_results_{str(mdp)}.pkl', 'wb') as f:
         pickle.dump({'pi_list': pi_list, 'v_list': v_list}, f)
     
     return pi_list, v_list
 
 
-def visualize_policy(pi):
+def visualize_policy_cli(pi):
     out = []
     
     for s1 in range(20, -1, -1):
@@ -95,16 +100,31 @@ def d_to_arr(d):
     return d_arr
 
 
-def visualize_values(v):
-    v_arr = d_to_arr(v)
+def visualize_policy_plot(pi, title):
+    pi_arr = d_to_arr(pi)
 
-    plt.pcolormesh(v_arr)
+    plt.pcolormesh(pi_arr)
     plt.colorbar()
 
-    plt.title('Optimal Policy')
+    plt.title(title)
     plt.ylabel('Cars in Location 1')
     plt.xlabel('Cars in Location 2')
 
+    plt.show()
+
+
+def visualize_values(v, title):
+    v_arr = d_to_arr(v)
+
+    x = np.arange(21)
+    y = np.arange(21)
+
+    ax = plt.axes(projection='3d')
+    ax.plot_surface(x, y, v_arr)
+
+    ax.title(title)
+    ax.ylabel('Cars in Location 1')
+    ax.xlabel('Cars in Location 2')
     plt.show()
 
 

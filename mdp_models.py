@@ -92,7 +92,6 @@ class JCR_MDP:
         p_r = dict()
         s1, s2 = s
         s1_beg, s2_beg = s1 - a, s2 + a
-        action_rw = self.move_rw * abs(a)
 
         ss1, ss2 = ss
 
@@ -196,6 +195,9 @@ class JCR_MDP:
 
         return pi
 
+    def __str__(self):
+        return "JCR_MDP"
+
 
 
 class JCR_MDP_2(JCR_MDP):
@@ -220,3 +222,6 @@ class JCR_MDP_2(JCR_MDP):
         r += self.rent_rw * sum(s_rent)
 
         return r
+
+    def __str__(self):
+        return "JCR_MDP_2"
