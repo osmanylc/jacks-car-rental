@@ -1,6 +1,8 @@
 import pickle
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def policy_iteration(mdp):
@@ -103,6 +105,7 @@ def d_to_arr(d):
 def visualize_policy_plot(pi, title):
     pi_arr = d_to_arr(pi)
 
+    f, _ = plt.subplots()
     plt.pcolormesh(pi_arr)
     plt.colorbar()
 
@@ -110,22 +113,27 @@ def visualize_policy_plot(pi, title):
     plt.ylabel('Cars in Location 1')
     plt.xlabel('Cars in Location 2')
 
-    plt.show()
+    f.show()
 
 
 def visualize_values(v, title):
     v_arr = d_to_arr(v)
+    x_ran, y_ran = v_arr.shape
 
-    x = np.arange(21)
-    y = np.arange(21)
+    x = np.arange(x_ran)
+    y = np.arange(y_ran)
 
-    ax = plt.axes(projection='3d')
-    ax.plot_surface(x, y, v_arr)
+    X, Y = np.meshgrid(x, y)
 
-    ax.title(title)
-    ax.ylabel('Cars in Location 1')
-    ax.xlabel('Cars in Location 2')
-    plt.show()
+    f = plt.figure()
+    ax = f.gca(projection='3d')
+    surf = ax.plot_surface(X, Y, v_arr, cmap=cm.viridis)
+    f.colorbar(surf)
+
+    plt.title(title)
+    plt.ylabel('Cars in Location 1')
+    plt.xlabel('Cars in Location 2')
+    f.show()
 
 
 def load_v_pi(fname):
