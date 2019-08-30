@@ -2,6 +2,8 @@
 
 To run the solution, clone the repo and run `run.py`.
 
+![Optimal policy](https://github.com/osmanylc/jacks-car-rental/blob/master/images/policy_JCR_MDP_2.png "Exercise 4.7 optimal policy") ![Optimal value function](https://github.com/osmanylc/jacks-car-rental/blob/master/images/values_JCR_MDP_2.png "Exercise 4.7 optimal value function")
+
 In this repo we solve exercise 4.7 from Sutton and Barto.
 
 First, we solve the simpler Example 4.2:
