@@ -1,3 +1,5 @@
+from os import path
+
 import mdp_models as mm
 import policy_iteration as polit
 
@@ -14,6 +16,8 @@ for mdp in [jcr, jcr2]:
     v = v_list[-1]
 
     # Plot optimal policy
-    polit.visualize_policy_plot(pi, 'Optimal Policy')
+    polit.visualize_policy_plot(pi, 'Optimal Policy', 
+        path.join('images', f'policy_{str(mdp)}.png'))
     # Plot optimal value function
-    polit.visualize_values(v, 'Optimal Value Function')
+    polit.visualize_values(v, 'Optimal Value Function', 
+        path.join('images', f'values_{str(mdp)}.png'))

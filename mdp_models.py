@@ -1,6 +1,7 @@
 import numpy as np
 from itertools import product
 
+
 class JCR_MDP:
     def __init__(self):
         self.states = self.init_states()
@@ -9,7 +10,6 @@ class JCR_MDP:
         self.rental_rate_2 = 4
         self.return_rate_1 = 3
         self.return_rate_2 = 2
-        self.epsilon = 1e-10
 
         self.rent_rw = 10
         self.move_rw = -2
@@ -190,7 +190,6 @@ class JCR_MDP:
         pi = dict()
 
         for s in states:
-            # pi[s] = s_to_a(s)[0]
             pi[s] = 0
 
         return pi

@@ -11,26 +11,38 @@ def policy_iteration(mdp):
     model.
     """
 
+    # Check if we've already saved results and return them
+    results_fname = f'policy_iteration_results_{str(mdp)}.pkl'
+    try:
+        with open(results_fname, 'rb') as f:
+            d = pickle.load(f)
+            return d['pi_list'], d['v_list']
+    except:
+        pass  # continue Policy Iteration if previous results absent
+
+    # Run policy iteration
     # ::::: Initialization :::::
     v = mdp.initialize_v(mdp.states)
     pi = mdp.initialize_pi(mdp.states, mdp.s_to_a)
     tolerance = 1e-2
 
+    # Keep track of intermediate policies and value functions
     v_list = [v.copy()]
     pi_list = [pi.copy()]
 
     policy_stable = False
-    policy_its = 1
+    policy_its = 1  # iterations counter
 
     while not policy_stable:
         print(f'::::: Policy Iteration {policy_its}')
         # ::::: Policy Evaluation :::::
         # Iterate until residual is smaller than tolerance
-        num_it = 1
+        num_it = 1  # evaluation iterations counter
         resid = np.inf
         while resid > tolerance:
             print(f'::::: Running Policy Evaluation {num_it}...')
             resid = 0
+            # Perform a Bellman update on every state
             for s in mdp.states:
                 v_old = v[s]
                 a = pi[s]
@@ -68,13 +80,15 @@ def policy_iteration(mdp):
             if old_a != pi[s] and a_vals[old_a] < a_vals[pi[s]]:
                 num_a_changed += 1
                 policy_stable = False
+
         print(f'Number of state actions changed: {num_a_changed}')
-        print('\n')
-        pi_list.append(pi.copy())
         visualize_policy_cli(pi)
+        print('\n')
+
+        pi_list.append(pi.copy())
         policy_its += 1
 
-    with open(f'policy_iteration_results_{str(mdp)}.pkl', 'wb') as f:
+    with open(results_fname, 'wb') as f:
         pickle.dump({'pi_list': pi_list, 'v_list': v_list}, f)
     
     return pi_list, v_list
@@ -102,7 +116,7 @@ def d_to_arr(d):
     return d_arr
 
 
-def visualize_policy_plot(pi, title):
+def visualize_policy_plot(pi, title, fig_file):
     pi_arr = d_to_arr(pi)
 
     f, _ = plt.subplots()
@@ -113,10 +127,10 @@ def visualize_policy_plot(pi, title):
     plt.ylabel('Cars in Location 1')
     plt.xlabel('Cars in Location 2')
 
-    f.show()
+    f.savefig(fig_file)
 
 
-def visualize_values(v, title):
+def visualize_values(v, title, fig_file):
     v_arr = d_to_arr(v)
     x_ran, y_ran = v_arr.shape
 
@@ -133,7 +147,7 @@ def visualize_values(v, title):
     plt.title(title)
     plt.ylabel('Cars in Location 1')
     plt.xlabel('Cars in Location 2')
-    f.show()
+    f.savefig(fig_file)
 
 
 def load_v_pi(fname):
